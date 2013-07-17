@@ -6,7 +6,7 @@
   "author": "Keith Hamilton <the.keith.hamilton@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "http://github.com/keithhamilton/super-date.git"
+    "url": "http://github.com/keithhamilton/superdate.git"
   },
   "devDependencies": {
     "tape": "~0.1.1",
