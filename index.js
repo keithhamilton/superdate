@@ -272,7 +272,10 @@
 /*--------------------
   ----- Setters ------
 --------------------*/
-
+	Date.prototype.correctTimezoneOffset = function(){
+		this.setHours(this.getHours() + (this.getTimezoneOffset()/60));
+	}
+	
 	Date.prototype.setLastDayOfMonth = function(month,year)
 	{
 		var d;
