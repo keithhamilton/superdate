@@ -216,3 +216,7 @@ pip-log.txt
 
 #node modules
 node_modules/
+
+# scripts (transpiled) directory
+scripts/
+scripts/*
