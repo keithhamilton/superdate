@@ -7,14 +7,11 @@ test('load superdate', function(t) {
 })
 
 test('resolve day and month to names', function(t){
-  t.plan(3)
+  t.plan(2)
 
   let date = new Date(2015,0,1) // Jan. 1, 2015
-  t.equal(superdate.dayOfWeek(date), 'thursday','first day of 2015 is Thursday')
-  t.equal(superdate.month(date), 'january', 'month should be January')
-  t.equal(superdate.year(), new Date().getFullYear(), 
-          'no arg should yield cuurent year')
-  t.end()
+  t.equal(superdate.dayName(date), 'thursday','first day of 2015 is Thursday')
+  t.equal(superdate.monthName(date), 'january', 'month should be January')
 })
 
 
@@ -25,7 +22,6 @@ test('increment date', function(t) {
   t.equal(superdate.addDay(date).getDate(),2, 'date should be 2')
   t.equal(superdate.addDay(date, -1).getDate(), 31, 'date should be 31 (december)')
   t.equal(superdate.subDay(date).getDate(), 31, 'date should be 31')
-  t.end()
 })
 
 test('increment month', function(t) {
@@ -36,7 +32,6 @@ test('increment month', function(t) {
   t.equal(superdate.addMonth(date, 4).getMonth(), 4, 'should be 5')
   t.equal(superdate.addMonth(date, -1).getMonth(), 11, 'should be 11')
   t.equal(superdate.subMonth(date, 1).getMonth(), 11, 'should be 11')
-  t.end()
 })
 
 test('increment year', function(t) {
@@ -46,7 +41,6 @@ test('increment year', function(t) {
   t.equal(superdate.addYear(date).getFullYear(), 2016, 'should be 2016')
   t.equal(superdate.addYear(date, -2).getFullYear(), 2013, 'should be 2013')
   t.equal(superdate.subYear(date, 2).getFullYear(), 2013, 'should be 2013')
-  t.end()
 })
 
 test('increment hour', function(t) {
@@ -56,7 +50,6 @@ test('increment hour', function(t) {
   t.equal(superdate.addHour(date, 4).getHours(), 16, 'should be 16 (4 PM)')
   t.equal(superdate.addHour(date, -3).getHours(), 9, 'should be 9 AM')
   t.equal(superdate.subHour(date, 3).getHours(), 9, 'should be 9')
-  t.end();
 })
 
 test('increment minutes', function(t) {
@@ -66,7 +59,6 @@ test('increment minutes', function(t) {
   t.equal(superdate.addMinute(date).getMinutes(), 31, 'minutes should be 31')
   t.equal(superdate.addMinute(date, 15).getMinutes(), 45, 'should be 45')
   t.equal(superdate.subMinute(date, 15).getMinutes(), 15, 'should be 15')
-  t.end()
 })
 
 test('increment seconds', function(t) {
@@ -77,7 +69,6 @@ test('increment seconds', function(t) {
   t.equal(superdate.addSecond(date, 2).getSeconds(), 1, 'seconds should be 1')
   t.equal(superdate.subSecond(date, 10).getSeconds(), 49, 'seconds should be 49')
   t.equal(superdate.subSecond(date, -1).getSeconds(), 0, 'seconds should be 0')
-  t.end();
 })
 
 test('increment milliseconds', function(t) {
@@ -88,7 +79,6 @@ test('increment milliseconds', function(t) {
   t.equal(superdate.addMs(date, 10).getMilliseconds(), 9, 'ms should be 9')
   t.equal(superdate.addMs(date).getSeconds(), 0, 'seconds should be 0')
   t.equal(superdate.subMs(date).getMilliseconds(), 998, 'ms should be 998')
-  t.end();
 })
 
 test('get first day of month', function(t) {
@@ -98,11 +88,6 @@ test('get first day of month', function(t) {
   t.equal(superdate.firstDayInstance(6, 0, 2015).getTime(), testDate.getTime(), 
           'should equal the first saturday in 2015')
 })
-
-// test('get last instance of day in month', function(t){
-//   t.plan(1)
-  
-// })
 
 test('convert text number to actual number', function(t){
   t.plan(6)
@@ -119,127 +104,98 @@ test('test translation from text', function(t){
   t.plan(8)
   let currentDate = new Date()
 
-  let twoDaysFuture = superdate.dateFromSpeech('in two days')
+  let twoDaysFuture = superdate.dateFromSpeech(currentDate, 'in two days')
   t.equal(Math.floor((twoDaysFuture - currentDate)/86400000), 2)
   
-  let threeMonthsFuture = superdate.dateFromSpeech('in three months')
+  let threeMonthsFuture = superdate.dateFromSpeech(currentDate, 'in three months')
   t.equal(Math.round(((threeMonthsFuture - currentDate)/86400000)/10) * 10, 90)
 
-  let threefoursevenDays = superdate.dateFromSpeech('in three hundred forty seven days')
+  let threefoursevenDays = superdate.dateFromSpeech(currentDate, 'in three hundred forty seven days')
   t.equal(Math.floor((threefoursevenDays - currentDate)/86400000), 347)
   
-  let threefoursevenDaysAgo = superdate.dateFromSpeech('three hundred forty seven days ago')
+  let threefoursevenDaysAgo = superdate.dateFromSpeech(currentDate, 'three hundred forty seven days ago')
   t.equal(Math.floor((threefoursevenDaysAgo - currentDate)/86400000), -347)
   
   let janOne = new Date(2015, 0, 1) // January 1, 2015 was a Thursday
-  let nextWednesday = superdate.dateFromSpeech('next wednesday', janOne)
+  let nextWednesday = superdate.dateFromSpeech(janOne, 'next wednesday')
   t.equal(nextWednesday.getDate(), 7, 'should be the seventh of January')
 
   let janSeven = new Date(2015, 0, 7) // January 7, 2015 was a Wednesday
-  let lastThursday = superdate.dateFromSpeech('last thursday', janSeven)
+  let lastThursday = superdate.dateFromSpeech(janSeven, 'last thursday')
   t.equal(lastThursday.getDate(), 1, 'should be the first of January')
   
-  let minusTwenty = superdate.dateFromSpeech('minus twenty days')
+  let minusTwenty = superdate.dateFromSpeech(currentDate, 'minus twenty days')
   t.equal(Math.round((currentDate - minusTwenty)/86400000), 20)
   
-  let zeroDays = superdate.dateFromSpeech('zero days from now', currentDate)
+  let zeroDays = superdate.dateFromSpeech(currentDate, 'zero days from now')
   t.equal(Math.round(currentDate - zeroDays), 0, 'dates should be equal')
+})
+
+test('get date of first instance of day [in month] [in year]', function(t){
+  t.plan(2)
+  let dayDate = superdate.firstDayInstance(0, 0, 2014)
+  t.equal(dayDate.getDate(), 5, 'should be 5 for first Sunday in Jan/2014')
+  
+  let nextDayDate = superdate.firstDayInstance(5, 0, 2014)
+  t.equal(nextDayDate.getDate(), 3, 'should be 3 for first Friday in Jan/2014')
 })
 
 test('get date of last instance of day [in month] [in year]', function(t){
   t.plan(2)
-  //parameters: ([day],[month],[year])
-  let date = new Date(2014, 1, 1)
-  let dayDate = superdate.getPrevDayInstance(date, 1)
-  t.equal(dayDate.getDate(),27,'date should be 28 for last Sunday in Jan/2014')
+  let dayDate = superdate.lastDayInstance(0, 0, 2014)
+  t.equal(dayDate.getDate(), 26, 'should be 26 for last Sunday in Jan/2014')
   
-  let nextDate = new Date(2014, 0, 23)
-  let nextDayDate = superdate.getPrevDayInstance(nextDate, 5)
-  t.equal(nextDayDate.getDate(), 17, 'date should be 17 for previous Friday')
+  let nextDayDate = superdate.lastDayInstance(5, 0, 2014)
+  t.equal(nextDayDate.getDate(), 31, 'should be 31 for last Friday in Jan/2014')
 })
 
 test('get nth instance of day [in month] [in year]', function(t){
-  t.plan(5)
-  //parameters: (n,[day],[month],[year]) 
-  // n is zero-indexed
+  t.plan(6)
   let date = new Date()
   /* 
      methods with omitted parameters commented out for purposes of showing how the method works. To test, you will need to update the dates to match the current month/year
   */
-  let day = superdate.nthDayInstance(1, 0, 0, 2015) // no parameters gets first instance of current day in current month in current year
+  let day = superdate.nthDayInstance(new Date(2015, 0), 0, 1)
   t.equal(day.getDate(), 4, 'date should be 4 for first Sunday in Jan/2015')
 
-  day = superdate.nthDayInstance(1, 3, 6, 2013) 
-  t.equal(day.getDate(), 3, 'date should be 10 for first Wednesday in July/2013')
-  day = superdate.nthDayInstance(3, 0, 6, 2013)
+  day = superdate.nthDayInstance(new Date(2013, 6), 3, 1)
+  t.equal(day.getDate(), 3, 'date should be 3 for first Wednesday in July/2013')
+  day = superdate.nthDayInstance(new Date(2013, 6), 0, 3)
   t.equal(day.getDate(), 21, 'date should be 21 for third Sunday in July/2013')
-  day = superdate.nthDayInstance(3,0,0, 2013)
+  day = superdate.nthDayInstance(new Date(2013, 0), 0, 3)
   t.equal(day.getDate(), 20, 'date should be 20 for third Sunday in January/2013')
-  day = superdate.nthDayInstance(3,0,0,2014)
+  day = superdate.nthDayInstance(new Date(2014, 0, 1), 0, 3)
   t.equal(day.getDate(), 19, 'date should be 19 for third Sunday in January/2014')
-  // t.end()
+  day = superdate.nthDayInstance(new Date(2013, 0), 0, -2)
+  t.equal(day.getDate(), 23, 'date should be 23 for fourth Sunday in December/2012')
 })
 
-// test('get next instance of day', function(t)
-// {
-// 	superdate = require('../')
-// 	var date = new Date()
-// 	t.equal(date.getNextDayInstance(0),21,'date should be 21 for next Sunday from 7/17/2013')
-// 	t.equal(date.getNextDayInstance(0,2),28, 'date should be 28 for two Sundays from 7/17/2013')
-// 	t.end()
-// })
-// test('get prior instance of day', function(t)
-// {
-// 	superdate = require('../')
-// 	var date = new Date()
-// 	t.equal(date.getPriorDayInstance(0),14,'date should be 14 for Sunday prior to 7/17/2013')
-// 	t.equal(date.getPriorDayInstance(0,2),7,'date should be 7 for two Sundays prior to 7/17/2013')
-// 	t.end()
-// })
-// test('get number of days remaining in year', function(t)
-// {
-// 	// takes one optional parameter, weekdays, which will limit return number of days to weekdays only
-// 	superdate = require('../')
-// 	var date = new Date()
-// 	t.equal(date.getRemainingDaysInYear(),166,'there are 166 days left in the year as of 7/17/2013')
-// 	t.equal(date.getRemainingDaysInYear(true),119,'there are 119 weekdays left in the year as of 7/17/2013')
-// 	t.end()
-// })
-// test('set last day of month', function(t)
-// {
-// 	superdate = require('../')
-// 	var date = new Date()
-// 	var setDate = new Date(2000,0,31)
-// 	date.setLastDayOfMonth(0,2000)
+test('get next instance of day', function(t){
+  t.plan(2)
+  let date = new Date(2015, 0, 1) // January 1, 2015
+  t.equal(superdate.nextDayInstance(date, 0).getDate(), 4, 'date should be Jan 4, 2015')
+  t.equal(superdate.nextDayInstance(date, 2).getDate(), 6, 'date should be Jan 6, 2015')
+})
 
-// 	t.equal(date.toLocaleDateString(),setDate.toLocaleDateString(),'date should be set to jan 31,2000')
-// 	t.end()
-// })
-// test('set first day of month', function(t)
-// {
-// 	superdate = require('../')
-// 	var date = new Date()
-// 	var setDate = new Date(2000,0,1)
-// 	date.setFirstDayOfMonth(0,2000)
-// 	t.equal(date.toLocaleDateString(),setDate.toLocaleDateString(), 'date should be set to jan 1, 2000')
-// 	t.end()
-// })
-// test('set date to next instance of day of week', function(t)
-// {
-// 	superdate = require('../')
-// 	var date = new Date()
-// 	date.setToFutureDayInstance(0)
-// 	t.equal(date.getDate(),21,'date of next sunday from 7/17/2013 is 21')
-// 	t.end()
-// })
-// test('set date to last (most recently past) instance of day of week', function(t)
-// {
-// 	superdate = require('../')
-// 	var date = new Date()
-// 	date.setToRecentDayInstance(0)
-// 	t.equal(date.getDate(),14,'date of most recent sunday from 7/17/2013 is 14')
-// 	date.setToRecentDayInstance(4,2)
-// 	t.equal(date.getDate(),4,'date of two Thursdays prior to 7/17/2013 is 4')
-// 	t.end()
-// })
+test('get prior instance of day', function(t){
+  t.plan(4)
+  /* set the date to Feb 5, 2015 (a Thursday), then fetch the date of the
+   * previous Sunday (Feb 1, 2015) and the previous Friday (Jan 30, 2015). 
+   */
+  var date = new Date(2015, 1, 5) // Feb. 5, 2015
+  t.equal(superdate.prevDayInstance(date, 0).getDate(), 1, 'date should be 1 (Feb 1, 2015)')
+  t.equal(superdate.prevDayInstance(date, 0).getMonth(), 1, 'month should be 1 (February)')
+  t.equal(superdate.prevDayInstance(date, 5).getDate(), 30,'date should be 30 (Jan 30, 2015)')
+  t.equal(superdate.prevDayInstance(date, 5).getMonth(), 0, 'month should be 0 (January)')
+})
+
+test('get number of days remaining in year', function(t){
+  // takes one optional parameter, weekdays, which will limit return number of days to weekdays only
+  t.plan(2)
+  var date = new Date(2015, 11, 1) // Dec 1, 2015 (30 days left, 23 weekdays)
+  t.equal(superdate.daysLeftInYear(date),30, 'there are 30 days left in the year after 12/1/2015')
+  t.equal(superdate.daysLeftInYear(date,true), 22,'there are 22 weekdays left in the year after 12/1/2015')
+})
+
+
 

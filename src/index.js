@@ -1,52 +1,4 @@
-// date, day, month, year resolution
-export function resolveDate(d=new Date()) {
-  if (d.constructor.name === 'Date') {
-    return d.getDate()
-  }
-  else if(d.constructor.name === 'String'){
-    return parseInt(d, 10)
-  }
-  else if(d.constructor.name === 'Number'){
-    return d
-  }
-}
 
-export function resolveDay(d=new Date()) {
-  if (d.constructor.name === 'Date') {
-    return d.getDay()
-  }
-  else if(d.constructor.name === 'String'){
-    return DAYS.indexOf(d.toLowerCase())
-  }
-  else if(d.constructor.name === 'Number'){
-    return DAYS[d]
-  }
-}
-
-export function resolveMonth(d=new Date()) {
-  if (d.constructor.name === 'Date') {
-    return d.getMonth()
-  }
-  else if(d.constructor.name === 'String'){
-    return MONTHS.indexOf(d.toLowerCase())
-  }
-  else if(d.constructor.name === 'Number'){
-    return MONTHS[d]
-  }
-}
-
-function resolveYear(d=new Date()) {
-  if (d.constructor.name === 'Date') {
-    return d.getFullYear()
-  }
-  else if(d.constructor.name === 'String'){
-    return parseInt(d, 10)
-  }
-  else if(d.constructor.name === 'Number'){
-    return d
-  }
-}
- 
 const DAYS = [
   "sunday",
   "monday",
@@ -71,6 +23,54 @@ const MONTHS = [
   "november",
   "december"
 ];
+
+export function resolveDate(d=new Date()) {
+  if (d.constructor.name === 'Date') {
+    return d.getDate()
+  }
+  else if(d.constructor.name === 'String'){
+    return parseInt(d, 10)
+  }
+  else if(d.constructor.name === 'Number'){
+    return d
+  }
+}
+
+export function resolveDay(d=new Date()) {
+  if (d.constructor.name === 'Date') {
+    return d.getDay()
+  }
+  else if(d.constructor.name === 'String'){
+    return DAYS.indexOf(d.toLowerCase())
+  }
+  else if(d.constructor.name === 'Number'){
+    return d
+  }
+}
+
+export function resolveMonth(d=new Date()) {
+  if (d.constructor.name === 'Date') {
+    return d.getMonth()
+  }
+  else if(d.constructor.name === 'String'){
+    return MONTHS.indexOf(d.toLowerCase())
+  }
+  else if(d.constructor.name === 'Number'){
+    return d
+  }
+}
+
+function resolveYear(d=new Date()) {
+  if (d.constructor.name === 'Date') {
+    return d.getFullYear()
+  }
+  else if(d.constructor.name === 'String'){
+    return parseInt(d, 10)
+  }
+  else if(d.constructor.name === 'Number'){
+    return d
+  }
+}
 
 export function resolveScalar(text){
   const _ = require('lodash')
@@ -116,95 +116,141 @@ export function resolveScalar(text){
 /*--------------------
   ----- Computation --
 --------------------*/
-export function dayOfWeek(date) {
-  let d = date || new Date()
-  if (d.constructor.name === "Date")
-    return DAYS[resolveDay(d)]
+export function dayName(date=new Date()) {
+  if (date.constructor.name === "Date")
+    return DAYS[date.getDay()]
+  if (date.constructor.name === 'Number')
+    return DAYS[date]
+
+  return null
 }
 
-export function month(date) {
-  let d = date || new Date()
-  if (d.constructor.name === 'Date')
-    return MONTHS[resolveMonth(d)]
-}
+export function monthName(date=new Date()) {
+  if (date.constructor.name === 'Date')
+    return MONTHS[date.getMonth()]
+  if (date.constructor.name === 'Number')
+    return MONTHS[d]
 
-export function year(date){
-  let d = date || new Date()
-  if (d.constructor.name === "Date")
-    return d.getFullYear()
+  return null
 }
 
 export function addDay(date=new Date(), n=1) {
+  /*
+   * adds n days to date
+   */
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() + n,
                  date.getHours(), date.getMinutes(), date.getSeconds(),
                  date.getMilliseconds())
 }
 
 export function subDay(date, n=1){
+  /*
+   * subtracts n days from date
+   */
   return addDay(date, (n * -1))
 }
 
 export function addMonth(date=new Date(), n=1) {
+  /* 
+   * adds n months to date
+   */
   return new Date(date.getFullYear(), date.getMonth() + n, date.getDate(),
                  date.getHours(), date.getMinutes(), date.getSeconds(),
                  date.getMilliseconds())
 }
 
 export function subMonth(date, n=1) {
+  /*
+   * subtracts n months from date
+   */
   return addMonth(date, (n * -1))
 }
 
 export function addYear(date=new Date(), n=1) {
+  /*
+   * adds n years to date
+   */
   return new Date(date.getFullYear() + n, date.getMonth(), date.getDate(),
                  date.getHours(), date.getMinutes(), date.getSeconds(),
                  date.getMilliseconds())                  
 }
 
 export function subYear(date, n=1) { 
+  /*
+   * subtracts n years from date
+   */
   return addYear(date, (n * -1))
 }
 
 export function addHour(date=new Date(), n=1) {
+  /*
+   * adds n hours to date
+   */
   return new Date(date.getFullYear(), date.getMonth(), date.getDate(),
                  date.getHours() + n, date.getMinutes(), date.getSeconds(),
                  date.getMilliseconds())
 }
 
 export function subHour(date, n=1) {
+  /*
+   * subtracts n hours from date
+   */
   return addHour(date, (n * -1))
 }
  
 export function addMinute(date=new Date(), n=1) {
+  /*
+   * adds n minutes to date
+   */
   return new Date(date.getFullYear(), date.getMonth(), date.getDate(),
                  date.getHours(), date.getMinutes() + n, date.getSeconds(),
                  date.getMilliseconds())
 }
 
 export function subMinute(date, n=1) { 
+  /* 
+   * subtracts n minutes from date
+   */
   return addMinute(date, (n * -1))
 }
 
 export function addSecond(date=new Date(), n=1){
+  /*
+   * adds n seconds to date
+   */
   return new Date(date.getFullYear(), date.getMonth(), date.getDate(),
                   date.getHours(), date.getMinutes(), date.getSeconds() + n,
                   date.getMilliseconds())
 }
 
 export function subSecond(date, n=1) { 
+  /*
+   * subtracts n seconds from date
+   */
   return addSecond(date, (n * -1))
 }
 
 export function addMs(date=new Date(), n=1){
+  /*
+   * adds n milliseconds to date
+   */
   return new Date(date.getFullYear(), date.getMonth(), date.getDate(),
                   date.getHours(), date.getMinutes(), date.getSeconds(),
                   date.getMilliseconds() + n)
 }
 
 export function subMs(date, n=1) { 
+  /*
+   * subtracts n milliseconds from date
+   */
   return addMs(date, (n * -1))
 }
 
 export function parts(date=null) {
+  /*
+   * returns an array of the parts of a date object
+   * if date is omitted from arguments it resolves to the current date
+   */
   let d = date || new Date()
   return [d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(),
           d.getSeconds(), d.getMilliseconds()]
@@ -213,52 +259,96 @@ export function parts(date=null) {
 /*--------------------
   ----- Getters ------
 --------------------*/
-export function firstDayInstance(day=0, month=undefined, year=undefined) {
+export function firstDayInstance(day=undefined, month=undefined, year=undefined) {
+  /*
+   * returns a date object for the first instance of some day in a month and year
+   * if day is omitted from arguments, it will resolve to the current day
+   * if month is omitted from arguments, it will resolve to the current month
+   * if year is omitted from arguments, it will resolve to the current yearr
+   *
+   * Example ******************************************************************
+   * superdate.firstDayInstance(0, 0, 2015) // returns 1/4/2015
+   */
+  let d = day === undefined ? new Date().getDay() : day
   let y = year === undefined ? new Date().getFullYear() : year
   let m = month === undefined ?  new Date().getMonth() : month
   let date = new Date(y, m, 1)
   let dayOfDate = date.getDay()
 
-  if (day > dayOfDate) {
-    return addDay(date, (day - dayOfDate))
+  if (d > dayOfDate) {
+    return addDay(date, (d - dayOfDate))
   }
-  else if (day < dayOfDate) {
+  else if (d < dayOfDate) {
     return addDay(date, (7 - dayOfDate))
   }
-
   return date
 }
 
-export function lastDayInstance(day=0, month=undefined, year=undefined) {
-  let day = resolveDay(day)
-  let date = subDay(new Date(resolveYear(year), (resolveMonth(month) + 1), 1))
+export function lastDayInstance(day=undefined, month=undefined, year=undefined) {
+  /*
+   * returns a date object for the last instance of some day in a month and year
+   * if day is omitted from arguments, it will be resolve to the current day
+   * if month is omitted from arguments, it will resolve to the current month
+   * if year is omitted from arguments, it will resolve to the current yearr
+   *
+   * Example ******************************************************************
+   * superdate.lastDayInstance(0, 0, 2015) // returns 1/25/2015
+   */
+  let d = day === undefined ? new Date().getDay() : day
+  let y = year === undefined ? new Date().getFullYear() : year
+  let m = month === undefined ?  new Date().getMonth() : month
+  let date = subDay(new Date(y, (m + 1), 1))
   let dayOfDate = date.getDay()
 
-  if(day > dayOfDate){
-    return date.addDay((7 + (dayOfDate - day)) * -1)
+  if(d > dayOfDate){
+    return addDay(date, (7 + (dayOfDate - d)) * -1)
   }
-  else if(day < dayOfDate){
-    return date.addDay(day - dayOfDate)
+  else if(d < dayOfDate){
+    return addDay(date, d - dayOfDate)
   }
 
   return date
  }
 
-export function nthDayInstance(n=1, day=undefined, month=undefined, year=undefined) {
-  let n = n - 1
-  let day = day === undefined ? resolveDay() : day
-  let month = month === undefined ? resolveMonth() : month
-  let year = year === undefined ? resolveYear() : year
+export function nthDayInstance(date=new Date(), day=undefined, n=1) {
+  /*
+   * returns the nth instance of some day, i.e. Sunday, from the date passed
+   * in as an argument. 
+   * if the date is ommitted from arguments, the current date will be used
+   * if the day is ommitted from arguments, the day of the current date will
+   * be used
+   * if n is ommitted from arguments, the next instance will be returned
+   * if n is not undefined, the nth instance of the day will be returned
+   *
+   * Example ************************************************************
+   * superdate.nthDayInstance(new Date(), 5, 3) // returns the third Friday from
+                                                // the current Date
+   * superdate.nthDayInstance(new Date(), 5, -3) // returns the third past 
+                                                 // Friday from the current Date
+   */
+  // if n > 0, decrement, if n < 0, increment, if n === 0, leave it
+  let n = n > 0 ? n - 1 : n < 0 ? n + 1 : 0
+  let day = day === undefined ? date.getDay() : day
+  let month = month === undefined ? date.getMonth() : month
+  let year = year === undefined ? date.getFullYear() : year
   let firstDay = firstDayInstance(day, month, year)
-  let date = addDay(firstDay, (7 * n))
+  let nthDate = addDay(firstDay, (7 * n))
 
-  if(date.getMonth() > month) {
-    return subDay(date, 7)
+  if(nthDate.getMonth() > month) {
+    return subDay(nthDate, 7)
   }
-  return date
+  return nthDate
 }
 
-export function getNextDayInstance(date=new Date(), day) {
+export function nextDayInstance(date=new Date(), day) {
+  /*
+   * returns the most immediate future instance of some day, i.e., Sunday
+   * from the date passed in to the argument list
+   * if date is omitted from arguments, current date will be used
+   * 
+   * Example ************************************************************
+   * superdate.nextDayInstance(new Date(2015, 0, 5), 0) // returns 1/4/2015
+   */
   let delta = ((d, cD) => {
     if(cD > d) {
       return (7 - Math.abs(cD - d))
@@ -269,7 +359,15 @@ export function getNextDayInstance(date=new Date(), day) {
   return addDay(date, delta)
 }
 
-export function getPrevDayInstance(date=new Date(), day) {
+export function prevDayInstance(date=new Date(), day) {
+  /*
+   * returns the most immediate previous instance of some day, i.e., Sunday
+   * from the date passed in to the argument list
+   * if date is omitted from arguments, current date will be used
+   * 
+   * Example ************************************************************
+   * superdate.prevDayInstance(new Date(2015, 0, 5), 0) // returns 12/28/2014
+   */
   let delta = ((d, cD) => {
     if(cD < d) {
       return 7 - Math.abs(cD - d)
@@ -281,13 +379,31 @@ export function getPrevDayInstance(date=new Date(), day) {
 }
 
 export function daysLeftInYear(date=new Date(), weekdays=false) {
-  if(!weekdays)
-    return Math.floor(new Date(((date.getFullYear() + 1), 0, 0) - date)/86400000)
+  /*
+   * returns the number of days left in the year after the date
+   * specified in the argument list.
+   * if the date argument is omitted, the current date will be used.
+   * if the weekdays argument is omitted, all days, inclusive of weekends
+   * will be counted.
+   * to count only weekdays, set weekdays to truthy value
+   *
+   * Example ************************************************************
+   * superdate.daysLeftInYear(new Date(2015, 11, 1), false) // 30 days
+   * superdate.daysLeftInYear(new Date(2015, 11, 1), true) // 22 days
+   */
+  if(!weekdays) {
+    let nextYear = new Date(date.getFullYear() + 1, 0, 0)
+    return (nextYear - date)/86400000
+  }
   
   let remainingDays = function(d=date, weekdays=true, acc=0){
     if(d - new Date(d.getFullYear()+1, 0, 0) === 0){
       return acc
     }
+
+    if(d.getDay() === 0 || d.getDay() === 6)
+      return remainingDays(addDay(d), weekdays, acc)
+
     return remainingDays(addDay(d), weekdays, (acc + 1))
   }
   
@@ -295,7 +411,21 @@ export function daysLeftInYear(date=new Date(), weekdays=false) {
 }
 
 
-export function dateFromSpeech(text=undefined, date=new Date()){
+export function dateFromSpeech(date=new Date(), text=undefined){
+  /*
+   * parses English for number expressions and returns a date relative to 
+   * the date supplied in the arguments list based off of what was said.
+   * if date is omitted, the current date will be used
+   * if text is omitted, a null value will be returned.
+   *
+   * Example ************************************************************
+   * superdate.dateFromSpeech('two days from now') // returns date two days in 
+   *                                               // future from current date
+   * superdate.dateFromSpeech('forty-five days from now')
+   */
+
+  if (!text) return null
+
   // start by looking for specific entities
   let primeTemporalRelevancePattern = 
       '(next|after|between|before|until){1,2}((\\s{1}\d+){1,}'
@@ -341,108 +471,9 @@ export function dateFromSpeech(text=undefined, date=new Date()){
     case 'sunday':
       let day = resolveDay(entity)
       if(isFuture)
-        return getNextDayInstance(date, day)
-      return getPrevDayInstance(date, day)
+        return nextDayInstance(date, day)
+      return prevDayInstance(date, day)
     case 'o\'clock':
       break
    }
 }  
-
-
-  /*
-   * tomorrow, next (week|month|MTWThFSaSu|year|decade|century|millenium),
-   * in (an|[0-9]+) (second|minute|hour|day|week|year)(s)?, 
-   * ([\\d]+ o'clock)
-  
-}
-//   Date.prototype.getRemainingDaysInYear = function(weekdays)
-//   {
-//     var d = new Date(this.getFullYear()+1,0,0)
-//     , totalDaysRemaining = Math.floor((d-this)/86400000)
-//     , weekdaysRemaining;
-
-//     if(weekdays)
-//     {
-//       d = new Date(this.getFullYear(),this.getMonth(),this.getDate());
-//       weekdaysRemaining = 0;
-//       for (var i=0;i<=totalDaysRemaining;i++)
-//       {
-// 	if(d.getDay() > 0 && d.getDay() < 6)
-// 	  weekdaysRemaining ++;
-// 	d.addDay();
-//       }
-//       return weekdaysRemaining;
-//     }
-
-//     return totalDaysRemaining;
-//   }
-
-// /*--------------------
-//   ----- Setters ------
-// --------------------*/
-//   Date.prototype.correctTimezoneOffset = function () {
-//     this.setHours(this.getHours() + (this.getTimezoneOffset()/60));
-//   }
-
-//   Date.prototype.setLastDayOfMonth = function (month,year) {
-//     var d
-
-//     month = resolveMonth(month,this);
-//     year = resolveYear(year,this);
-
-//     d = new Date(year,month);
-//     d.addDay(-1);
-
-//     this.setFullYear(year);
-//     this.setMonth(month);
-//     this.setDate(d.getDate());
-//   }
-
-//   Date.prototype.setFirstDayOfMonth = function(month,year)
-//   {
-//     var d;
-
-//     month = resolveMonth(month,this);
-//     year = resolveYear(year,this);
-
-//     d = new Date(year,month);
-
-//     this.setFullYear(year);
-//     this.setMonth(month);
-//     this.setDate(1);
-//   }
-
-//   Date.prototype.setToFutureDayInstance = function(day,n)
-//   {
-//     /*
-//       sets date to nth future instance of day
-//       if n is omitted, next instance of day is set
-//     */ 
-//     var date
-//     , daysToAdd;
-//     n = resolveN(n,0);
-//     day = resolveDay(day,this);
-//     date = this.getNextDayInstance(day);
-
-//     // forward date to next instance of day
-//     daysToAdd = date - this.getDate();
-//     // if number of instances is passed, add those days in (default value for n is 0)
-//     daysToAdd += (7*n);
-//     this.addDay(daysToAdd);
-//   }
-
-//   Date.prototype.setToRecentDayInstance = function(day,n)
-//   {
-//     var date
-//     , daysToSubtract;
-
-//     n = resolveN(n,1);
-//     n--;
-//     day = resolveDay(day,this);
-//     date = this.getPriorDayInstance(day);
-
-//     daysToSubtract = date - this.getDate();
-//     daysToSubtract -= (7*n);
-
-//     this.addDay(daysToSubtract);
-//   }
