@@ -1,34 +1,50 @@
 // date, day, month, year resolution
-function resolveDate(date){
-  return date.getDate()
-}
-
-function resolveDay(date) {
-  if (date.constructor.name === 'Date') {
-    return date.getDay()
+export function resolveDate(d=new Date()) {
+  if (d.constructor.name === 'Date') {
+    return d.getDate()
   }
-  else if(date.constructor.name === 'String'){
-    return DAYS.indexOf(date.toLowerCase())
+  else if(d.constructor.name === 'String'){
+    return parseInt(d, 10)
   }
-  else if(date.constructor.name === 'Number'){
-    return DAYS[date]
+  else if(d.constructor.name === 'Number'){
+    return d
   }
 }
 
-function resolveMonth(date) {
-  if (date.constructor.name === 'Date') {
-    return date.getMonth()
+export function resolveDay(d=new Date()) {
+  if (d.constructor.name === 'Date') {
+    return d.getDay()
   }
-  else if(date.constructor.name === 'String'){
-    return MONTHS.indexOf(date.toLowerCase())
+  else if(d.constructor.name === 'String'){
+    return DAYS.indexOf(d.toLowerCase())
   }
-  else if(date.constructor.name === 'Number'){
-    return MONTHS[date]
+  else if(d.constructor.name === 'Number'){
+    return DAYS[d]
   }
 }
 
-function resolveYear(date) {
-  return date.getFullYear()
+export function resolveMonth(d=new Date()) {
+  if (d.constructor.name === 'Date') {
+    return d.getMonth()
+  }
+  else if(d.constructor.name === 'String'){
+    return MONTHS.indexOf(d.toLowerCase())
+  }
+  else if(d.constructor.name === 'Number'){
+    return MONTHS[d]
+  }
+}
+
+function resolveYear(d=new Date()) {
+  if (d.constructor.name === 'Date') {
+    return d.getFullYear()
+  }
+  else if(d.constructor.name === 'String'){
+    return parseInt(d, 10)
+  }
+  else if(d.constructor.name === 'Number'){
+    return d
+  }
 }
  
 const DAYS = [
@@ -109,7 +125,7 @@ export function dayOfWeek(date) {
 export function month(date) {
   let d = date || new Date()
   if (d.constructor.name === 'Date')
-    return MONTHS[da]
+    return MONTHS[resolveMonth(d)]
 }
 
 export function year(date){
@@ -197,12 +213,12 @@ export function parts(date=null) {
 /*--------------------
   ----- Getters ------
 --------------------*/
-export function firstDayInstance(day=0, month=null, year=null) {
-  let y = year === null ? new Date().getFullYear() : year
-  let m = month === null ? new Date().getMonth() : month
+export function firstDayInstance(day=0, month=undefined, year=undefined) {
+  let y = year === undefined ? new Date().getFullYear() : year
+  let m = month === undefined ?  new Date().getMonth() : month
   let date = new Date(y, m, 1)
   let dayOfDate = date.getDay()
-  
+
   if (day > dayOfDate) {
     return addDay(date, (day - dayOfDate))
   }
@@ -213,9 +229,9 @@ export function firstDayInstance(day=0, month=null, year=null) {
   return date
 }
 
-export function lastDayInstance(day=0, month=null, year=null) {
+export function lastDayInstance(day=0, month=undefined, year=undefined) {
   let day = resolveDay(day)
- let date = subDay(new Date(resolveYear(year), (resolveMonth(month) + 1), 1))
+  let date = subDay(new Date(resolveYear(year), (resolveMonth(month) + 1), 1))
   let dayOfDate = date.getDay()
 
   if(day > dayOfDate){
@@ -228,21 +244,21 @@ export function lastDayInstance(day=0, month=null, year=null) {
   return date
  }
 
-export function nthDayInstance(n=0, day=null, month=null, year=null) {
-  let day = resolveDay(day)
-  let month = resolveMonth(month)
-  let year = resolveYear(year)
-  let firstDayInstance = dateOfFirstDayInstance(day, month, year)
-  let date = addDay(new Date(year, month, firstDayInstance), (7 * n))
-  
+export function nthDayInstance(n=1, day=undefined, month=undefined, year=undefined) {
+  let n = n - 1
+  let day = day === undefined ? resolveDay() : day
+  let month = month === undefined ? resolveMonth() : month
+  let year = year === undefined ? resolveYear() : year
+  let firstDay = firstDayInstance(day, month, year)
+  let date = addDay(firstDay, (7 * n))
+
   if(date.getMonth() > month) {
-    return date.addDay(-7)
+    return subDay(date, 7)
   }
-  
   return date
 }
 
-export function getNextDayInstance(day, date=new Date()) {
+export function getNextDayInstance(date=new Date(), day) {
   let delta = ((d, cD) => {
     if(cD > d) {
       return (7 - Math.abs(cD - d))
@@ -253,15 +269,15 @@ export function getNextDayInstance(day, date=new Date()) {
   return addDay(date, delta)
 }
 
-export function getLastDayInstance(day, date=new Date()) {
+export function getPrevDayInstance(date=new Date(), day) {
   let delta = ((d, cD) => {
     if(cD < d) {
-      return (7 - Math.abs(cD - d))
+      return 7 - Math.abs(cD - d)
     }
-    return Math.abs(cD - d) - 7
+    return Math.abs(cD - d)
   })(day, date.getDay())
 
-  return addDay(date, delta * -1)
+  return subDay(date, delta)
 }
 
 export function daysLeftInYear(date=new Date(), weekdays=false) {
@@ -279,7 +295,7 @@ export function daysLeftInYear(date=new Date(), weekdays=false) {
 }
 
 
-export function dateFromSpeech(text=null, date=new Date()){
+export function dateFromSpeech(text=undefined, date=new Date()){
   // start by looking for specific entities
   let primeTemporalRelevancePattern = 
       '(next|after|between|before|until){1,2}((\\s{1}\d+){1,}'
@@ -325,8 +341,8 @@ export function dateFromSpeech(text=null, date=new Date()){
     case 'sunday':
       let day = resolveDay(entity)
       if(isFuture)
-        return getNextDayInstance(day, date)
-      return getLastDayInstance(day, date)
+        return getNextDayInstance(date, day)
+      return getPrevDayInstance(date, day)
     case 'o\'clock':
       break
    }
