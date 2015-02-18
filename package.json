@@ -1,7 +1,9 @@
 {
   "name": "superdate",
   "description": "extends Date.prototype with convenience methods",
-  "tags": ["date"],
+  "tags": [
+    "date"
+  ],
   "version": "0.0.1",
   "author": "Keith Hamilton <the.keith.hamilton@gmail.com>",
   "repository": {
@@ -16,7 +18,12 @@
     "test": "tap ./test/*.js"
   },
   "bugs": "http://github.com/keithhamilton/superdate/issues",
-  "engines": ["node >= 0.2.0"],
+  "engines": [
+    "node >= 0.2.0"
+  ],
   "license": "MIT",
-  "main": "index.js"
+  "main": "index.js",
+  "dependencies": {
+    "lodash": "^3.2.0"
+  }
 }
