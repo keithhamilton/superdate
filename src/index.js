@@ -393,7 +393,7 @@ export function daysLeftInYear(date=new Date(), weekdays=false) {
    */
   if(!weekdays) {
     let nextYear = new Date(date.getFullYear() + 1, 0, 0)
-    return (nextYear - date)/86400000
+    return parseInt((nextYear - date)/86400000, 10)
   }
   
   let remainingDays = function(d=date, weekdays=true, acc=0){
@@ -407,7 +407,7 @@ export function daysLeftInYear(date=new Date(), weekdays=false) {
     return remainingDays(addDay(d), weekdays, (acc + 1))
   }
   
-  return remainingDays(date, weekdays, 0)
+  return parseInt(remainingDays(date, weekdays, 0), 10)
 }
 
 
