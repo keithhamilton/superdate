@@ -31,6 +31,11 @@ Superdate provides functionality to stuff like:
 
 To check out all the methods, see the source or the tests (for examples). 
 
+# building, cleaning, testing
+To build the script, run ```gulp build```
+To run the tests, run ```gulp test```
+To clean, run ```gulp clean```
+
 # usage
 ``` js
 const superdate = require('superdate');
