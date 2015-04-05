@@ -327,12 +327,12 @@ export function nthDayInstance(date=new Date(), day=undefined, n=1) {
                                                  // Friday from the current Date
    */
   // if n > 0, decrement, if n < 0, increment, if n === 0, leave it
-  let n = n > 0 ? n - 1 : n < 0 ? n + 1 : 0
-  let day = day === undefined ? date.getDay() : day
+  let _n = n > 0 ? n - 1 : n < 0 ? n + 1 : 0
+  let _day = day === undefined ? date.getDay() : day
   let month = month === undefined ? date.getMonth() : month
   let year = year === undefined ? date.getFullYear() : year
-  let firstDay = firstDayInstance(day, month, year)
-  let nthDate = addDay(firstDay, (7 * n))
+  let firstDay = firstDayInstance(_day, month, year)
+  let nthDate = addDay(firstDay, (7 * _n))
 
   if(nthDate.getMonth() > month) {
     return subDay(nthDate, 7)

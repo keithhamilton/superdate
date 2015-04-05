@@ -4,15 +4,18 @@
   "tags": [
     "date"
   ],
-  "version": "0.0.1",
+  "version": "1.0.1",
   "author": "Keith Hamilton <the.keith.hamilton@gmail.com>",
   "repository": {
     "type": "git",
     "url": "http://github.com/keithhamilton/superdate.git"
   },
   "devDependencies": {
-    "tape": "~0.1.1",
-    "tap": "~0.3.3"
+    "gulp": "^3.8.11",
+    "gulp-babel": "^5.0.0",
+    "gulp-shell": "^0.4.0",
+    "tap": "~0.3.3",
+    "tape": "~0.1.1"
   },
   "scripts": {
     "test": "tap ./test/*.js"
