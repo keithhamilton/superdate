@@ -31,6 +31,12 @@ Superdate provides functionality to stuff like:
 
 To check out all the methods, see the source or the tests (for examples). 
 
+# installing
+Superdate can be installed via npm:
+```
+npm install superdate
+```
+
 # building, cleaning, testing
 To build the script, run ```gulp build```
 To run the tests, run ```gulp test```
