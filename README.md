@@ -1,43 +1,59 @@
 superdate
 =========
 
-Extends Date.prototype with many convenience methods. Superdate transforms a date object into a much stronger object that can generate dates (integers), find remaining days in the year, find the next occurence of Thursday (for example), and much more.
+Superdate is a functional convenience library for working with Date objects.
+I decided I really hated having to write:
 
-To check out how the methods work, see the test suite (all methds tested in test suite);
-
-# methods
 ``` js
-var superdate = require('superdate');
+var date = new Date()
+// I want to add two days
+date.setDate(date.getDate() + 2)
 ```
+
+and decided to embark on writing this library. Originally it used to extend the
+Date.prototype object, now refactored to have the same functionality, but also
+to be 100% functional, using only pure functions.
+
+Instead of the above code to change the date by a couple days, with superdate,
+you just call the ``addDate`` method:
+
+```js
+var newDate = superdate.addDate(date, 2);
+```
+
+Superdate provides functionality to stuff like:
+
+- find the first Tuesday in a month
+- add/subtract any relevant part of a date (year, month, milisecond, etc.)
+- advance your date three Tuesdays into the future
+- parse date differences from speech ("Set that for three days from now")
+- a whole lot more.
+
+To check out all the methods, see the source or the tests (for examples). 
 
 # usage
 ``` js
-var superdate = require('superdate');
-var date = new Date(2013,6,17); // July 17, 2013 
+const superdate = require('superdate');
+const date = new Date(2015,6,17); // July 4, 2015
 
 // computations on date object
-date.addDay(); // date --> July 18, 2013
-date.addDay(10); // date --> July 28, 2013
-date.addMonth(); // date --> August 28, 2013
-console.log(date.month()); // outputs 'August'
-console.log(date.dayOfWeek()); // outputs 'Wednesday'
+superdate.addDay(date); // July 5, 2015
+superdate.addDay(date, 10); // July 14, 2015
+superdate.addMonth(date); // August 4, 2015
+console.log(superdate.resolveMonth('January')); // 0
+console.log(superdate.dayOfWeek('Sunday')); // 0
 
 // get information about dates surrounding your date object
-var day = date.getFirstDayOfMonth() // day === 4 (Thursday, August 1)
-var nextSundayDate = date.getNextDayInstance(0); // nextSundayDate === 1 (September 1)
+superdate.getFirstDayOfMonth() // 3 (Wednesday, July 1)
+let nextSundayDate = superdate.getNextDayInstance(date, 0); // July 5, 2015
 
-var date = new Date(2013,6,17); // resetting to July 17, 2013
-var numDaysLeftInYear = date.getRemainingDaysInYear(); // numDaysLeftInYear === 166
-var numWeekdaysLeftInYear = date.getRemainingDaysInYear(true); numWeekdaysLeftInYear === 119
-
-//set the date object to relative dates to current
-date.setLastDayOfMonth(); // date --> July 31, 2013
-date.setFirstDayOfMonth(3,2013); // date --> April 1, 2013
-date.setToFutureDayInstance(0,3); // date --> April 19, 2013 (three sundays from April 1)
-date.setToRecentDayInstance(3,3); // date --> April 1, 2013 (three wednesdays prior to April 19)
+let numDaysLeftInYear = superdate.daysLeftInYear(date); // 180
 ```
 
-Again, for a more complete look, check out the tests. Many of the methods have optional parameters that will default to the current value of the date's properties if omitted (month would resolve to date.getMonth(), for example if omitted from a method).
+Again, for a more complete look, check out the tests. Many of the methods have
+optional parameters that will default to the current date's
+properties if omitted (month would resolve to ``new Date.getMonth()``,
+for example, if omitted from a method).
 
 
 
